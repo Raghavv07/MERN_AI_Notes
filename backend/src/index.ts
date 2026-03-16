@@ -44,20 +44,29 @@ const app: Application = express();
 app.use(express.json());
 app.use(cookieParser());
 
-// CORS configuration - allow multiple frontend ports during development
+// CORS configuration - allow explicit env origins + local dev + Render frontend aliases.
+const configuredOrigins = (process.env.FRONTEND_URL || '')
+  .split(',')
+  .map((origin) => origin.trim())
+  .filter(Boolean);
+
 const allowedOrigins = [
-  process.env.FRONTEND_URL,
+  ...configuredOrigins,
   'http://localhost:5173',
   'http://localhost:5174',
   'http://localhost:5175',
 ].filter(Boolean);
+
+const isAllowedRenderFrontend = (origin: string): boolean => {
+  return /^https:\/\/notes-mern-frontend(?:-[a-z0-9-]+)?\.onrender\.com$/i.test(origin);
+};
 
 app.use(
   cors({
     origin: (origin, callback) => {
       // Allow requests with no origin (like mobile apps or curl requests)
       if (!origin) return callback(null, true);
-      if (allowedOrigins.includes(origin)) {
+      if (allowedOrigins.includes(origin) || isAllowedRenderFrontend(origin)) {
         return callback(null, true);
       }
       return callback(null, false);
