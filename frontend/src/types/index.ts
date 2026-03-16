@@ -52,10 +52,14 @@ export interface UpdateNotePayload {
 
 // Quiz Types
 export interface QuizQuestion {
+  _id: string;
   question: string;
-  options: string[];
-  correctAnswer: number;
+  options: {
+    text: string;
+    isCorrect: boolean;
+  }[];
   explanation: string;
+  difficulty: 'easy' | 'medium' | 'hard';
 }
 
 export interface Quiz {
@@ -64,17 +68,22 @@ export interface Quiz {
   note: string;
   topic: string;
   questions: QuizQuestion[];
-  difficulty: 'easy' | 'medium' | 'hard';
   totalQuestions: number;
-  attemptedAt?: string;
+  attemptedCount: number;
+  bestScore: number;
+  lastAttemptedAt?: string;
   score?: number;
-  timeSpent?: number;
+  attemptedAt?: string;
+  difficulty?: 'easy' | 'medium' | 'hard';
   createdAt: string;
   updatedAt: string;
 }
 
 export interface QuizAttemptPayload {
-  answers: number[];
+  answers: {
+    questionId: string;
+    selectedOption: number;
+  }[];
   timeSpent: number;
 }
 
@@ -153,24 +162,6 @@ export interface RecentActivity {
   recentlyCompleted: Note[];
   mostAccessed: Note[];
   lastActiveAt: string;
-}
-
-export interface LeaderboardUser {
-  _id: string;
-  fullName: string;
-  totalNotesGenerated: number;
-  studyStreak: number;
-  completedTopics: number;
-}
-
-export interface Leaderboard {
-  leaderboard: LeaderboardUser[];
-  userRank: {
-    rank: number;
-    totalNotesGenerated: number;
-    studyStreak: number;
-    completedTopics: number;
-  };
 }
 
 // API Response Types

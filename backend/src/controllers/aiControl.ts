@@ -90,7 +90,7 @@ export const getQuiz = async (req: AuthRequest, res: Response): Promise<void> =>
       return;
     }
 
-    res.status(200).json({ quiz });
+    res.status(200).json({ quiz, quizzes: [quiz] });
   } catch (error) {
     console.error('Get Quiz Error:', error);
     res.status(500).json({ message: 'Failed to fetch quiz' });
@@ -275,7 +275,8 @@ export const getFlashcards = async (req: AuthRequest, res: Response): Promise<vo
       return;
     }
 
-    res.status(200).json({ flashcardSet });
+    // Keep response shape backward-compatible while supporting list-based UI rendering.
+    res.status(200).json({ flashcardSet, flashcardSets: [flashcardSet] });
   } catch (error) {
     console.error('Get Flashcards Error:', error);
     res.status(500).json({ message: 'Failed to fetch flashcards' });
@@ -343,6 +344,7 @@ export const updateFlashcardProgress = async (req: AuthRequest, res: Response): 
 
     res.status(200).json({
       message: 'Card progress updated',
+      flashcardSet,
       card,
       progress: {
         learnedCards: flashcardSet.learnedCards,

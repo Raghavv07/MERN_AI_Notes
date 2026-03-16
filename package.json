@@ -1,4 +1,10 @@
 {
+  "scripts": {
+    "build": "npm --prefix frontend run build && npm --prefix backend run build",
+    "build:frontend": "npm --prefix frontend run build",
+    "build:backend": "npm --prefix backend run build",
+    "start": "npm --prefix backend run start"
+  },
   "devDependencies": {
     "@types/pdfkit": "^0.17.5"
   }

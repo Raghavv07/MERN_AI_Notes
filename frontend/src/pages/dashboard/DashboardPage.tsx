@@ -1,7 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { motion } from 'framer-motion';
 import {
-  Award,
   BookOpen,
   Bookmark,
   CheckCircle,
@@ -29,7 +28,6 @@ import {
 } from 'recharts';
 import { dashboardApi } from '../../api';
 import {
-  Badge,
   Card,
   CardContent,
   CardHeader,
@@ -70,11 +68,6 @@ export default function DashboardPage() {
   const { data: activity } = useQuery({
     queryKey: ['recent-activity'],
     queryFn: () => dashboardApi.getRecentActivity(5),
-  });
-
-  const { data: leaderboard } = useQuery({
-    queryKey: ['leaderboard'],
-    queryFn: dashboardApi.getLeaderboard,
   });
 
   if (statsLoading || progressLoading) {
@@ -168,7 +161,7 @@ export default function DashboardPage() {
       </motion.div>
 
       {/* Main Content Grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Progress Circle */}
         <motion.div variants={itemVariants}>
           <Card className="h-full">
@@ -391,56 +384,6 @@ export default function DashboardPage() {
           </Card>
         </motion.div>
 
-        {/* Leaderboard */}
-        <motion.div variants={itemVariants}>
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Award className="w-5 h-5 text-yellow-500" />
-                Leaderboard
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-3">
-                {leaderboard?.leaderboard?.slice(0, 5).map((player, index) => (
-                  <div
-                    key={player._id}
-                    className={`flex items-center justify-between p-2 rounded-lg ${
-                      player._id === user?._id ? 'bg-primary/10' : 'hover:bg-muted/50'
-                    } transition-colors`}
-                  >
-                    <div className="flex items-center gap-3">
-                      <span
-                        className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold ${
-                          index === 0
-                            ? 'bg-yellow-500 text-white'
-                            : index === 1
-                              ? 'bg-gray-400 text-white'
-                              : index === 2
-                                ? 'bg-orange-600 text-white'
-                                : 'bg-muted text-muted-foreground'
-                        }`}
-                      >
-                        {index + 1}
-                      </span>
-                      <span className="text-sm font-medium truncate max-w-25">
-                        {player.fullName}
-                      </span>
-                    </div>
-                    <Badge variant="secondary">{player.totalNotesGenerated} notes</Badge>
-                  </div>
-                ))}
-                {leaderboard?.userRank && (
-                  <div className="pt-2 border-t">
-                    <p className="text-sm text-muted-foreground text-center">
-                      Your rank: <span className="font-bold">#{leaderboard.userRank.rank}</span>
-                    </p>
-                  </div>
-                )}
-              </div>
-            </CardContent>
-          </Card>
-        </motion.div>
       </div>
     </motion.div>
   );

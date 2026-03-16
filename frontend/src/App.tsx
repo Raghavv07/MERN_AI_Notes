@@ -67,7 +67,6 @@ function AppRoutes() {
         <Route path="/bookmarks" element={<BookmarksPage />} />
         <Route path="/quizzes" element={<QuizzesPage />} />
         <Route path="/flashcards" element={<FlashcardsPage />} />
-        <Route path="/leaderboard" element={<DashboardPage />} />
       </Route>
 
       {/* Default Redirect */}

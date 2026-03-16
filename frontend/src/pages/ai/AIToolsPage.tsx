@@ -152,7 +152,10 @@ function QuizTab({ noteId }: { noteId: string }) {
   const submitQuizMutation = useMutation({
     mutationFn: () =>
       aiApi.submitQuizAttempt(currentQuiz!._id, {
-        answers: selectedAnswers,
+        answers: currentQuiz!.questions.map((q, index) => ({
+          questionId: q._id,
+          selectedOption: selectedAnswers[index],
+        })),
         timeSpent: 0,
       }),
     onSuccess: (data) => {
@@ -253,7 +256,7 @@ function QuizTab({ noteId }: { noteId: string }) {
               <Badge variant="outline">
                 Question {currentQuestion + 1} of {currentQuiz.totalQuestions}
               </Badge>
-              <Badge>{currentQuiz.difficulty}</Badge>
+              <Badge>{question.difficulty}</Badge>
             </div>
             <Progress
               value={((currentQuestion + 1) / currentQuiz.totalQuestions) * 100}
@@ -275,7 +278,7 @@ function QuizTab({ noteId }: { noteId: string }) {
                   }`}
                 >
                   <span className="font-medium mr-2">{String.fromCharCode(65 + index)}.</span>
-                  {option}
+                  {option.text}
                 </button>
               ))}
             </div>
@@ -369,11 +372,11 @@ function QuizTab({ noteId }: { noteId: string }) {
                   >
                     <div className="flex items-center justify-between">
                       <span className="font-medium">
-                        {quiz.difficulty} Quiz • {quiz.totalQuestions} questions
+                        Quiz • {quiz.totalQuestions} questions
                       </span>
-                      {quiz.score !== undefined && (
+                      {quiz.bestScore > 0 && (
                         <Badge variant="secondary">
-                          Score: {Math.round((quiz.score / quiz.totalQuestions) * 100)}%
+                          Best: {quiz.bestScore}%
                         </Badge>
                       )}
                     </div>

@@ -41,6 +41,7 @@ export const pdfDownload = async (req: AuthRequest, res: Response): Promise<void
     const doc = new PDFDocument({
       size: 'A4',
       margins: { top: 50, bottom: 50, left: 50, right: 50 },
+      bufferPages: true,
     });
 
     // Set response headers for PDF download
@@ -83,7 +84,7 @@ export const pdfDownload = async (req: AuthRequest, res: Response): Promise<void
     doc.moveDown(1);
 
     // Add content
-    const content = note.notes;
+    const content = note.notes || '';
     const lines = content.split('\n');
 
     for (const line of lines) {

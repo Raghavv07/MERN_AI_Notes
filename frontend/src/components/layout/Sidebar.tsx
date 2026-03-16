@@ -11,7 +11,6 @@ import {
   Moon,
   Plus,
   Sun,
-  Trophy,
   User,
   X,
 } from 'lucide-react';
@@ -28,7 +27,6 @@ const navItems = [
   { path: '/bookmarks', label: 'Bookmarks', icon: Bookmark },
   { path: '/quizzes', label: 'My Quizzes', icon: Brain },
   { path: '/flashcards', label: 'Flashcards', icon: Layers },
-  { path: '/leaderboard', label: 'Leaderboard', icon: Trophy },
 ];
 
 export default function Sidebar() {

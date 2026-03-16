@@ -74,7 +74,11 @@ export default function CreateNotePage() {
     onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: ['notes'] });
       toast.success('Notes generated successfully!');
-      navigate(`/notes/${data.notes._id}`);
+      if (data.notes?._id) {
+        navigate(`/notes/${data.notes._id}`);
+      } else {
+        navigate('/notes');
+      }
     },
     onError: (error: Error & { response?: { data?: { message?: string } } }) => {
       toast.error(error.response?.data?.message || 'Failed to generate notes');

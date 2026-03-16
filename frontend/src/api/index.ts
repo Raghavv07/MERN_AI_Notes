@@ -2,7 +2,6 @@ import type {
   AuthResponse,
   CreateNotePayload,
   FlashcardSet,
-  Leaderboard,
   Note,
   Quiz,
   QuizAttemptPayload,
@@ -204,8 +203,9 @@ export const aiApi = {
   },
 
   getQuizzesByNote: async (noteId: string) => {
-    const response = await api.get<{ quizzes: Quiz[] }>(`/ai/quiz/note/${noteId}`);
-    return response.data;
+    const response = await api.get<{ quiz?: Quiz; quizzes?: Quiz[] }>(`/ai/quiz/note/${noteId}`);
+    const quizzes = response.data.quizzes ?? (response.data.quiz ? [response.data.quiz] : []);
+    return { quizzes };
   },
 
   submitQuizAttempt: async (quizId: string, data: QuizAttemptPayload) => {
@@ -261,7 +261,13 @@ export const aiApi = {
   // Get all user's quizzes
   getAllQuizzes: async () => {
     const response = await api.get<{ quizzes: Quiz[] }>('/ai/quiz');
-    return response.data;
+    const quizzes = (response.data.quizzes || []).map((quiz) => ({
+      ...quiz,
+      score: typeof quiz.score === 'number' ? quiz.score : quiz.bestScore,
+      attemptedAt: quiz.attemptedAt ?? quiz.lastAttemptedAt,
+      difficulty: quiz.difficulty ?? quiz.questions?.[0]?.difficulty ?? 'medium',
+    }));
+    return { quizzes };
   },
 
   // Delete quiz
@@ -306,11 +312,6 @@ export const dashboardApi = {
       isCompleted: boolean;
       completedAt?: string;
     }>(`/dashboard/complete/${noteId}`);
-    return response.data;
-  },
-
-  getLeaderboard: async () => {
-    const response = await api.get<Leaderboard>('/dashboard/leaderboard');
     return response.data;
   },
 };
