@@ -1,7 +1,7 @@
 services:
   - type: web
     name: notes-mern-api
-    runtime: node
+    env: node
     rootDir: backend
     plan: free
     autoDeploy: true
@@ -20,8 +20,9 @@ services:
       - key: GEMINI_API_KEY
         sync: false
 
-  - type: static
+  - type: web
     name: notes-mern-frontend
+    env: static
     rootDir: frontend
     buildCommand: npm install && npm run build
     staticPublishPath: dist
