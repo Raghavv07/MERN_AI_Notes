@@ -12,7 +12,7 @@ services:
       - key: NODE_ENV
         value: production
       - key: FRONTEND_URL
-        value: https://raghavainotes-mern.onrender.com
+        value: https://notes-mern-frontend-ioyr.onrender.com
       - key: MONGO_URI
         sync: false
       - key: JWT_SECRET
@@ -29,4 +29,4 @@ services:
     pullRequestPreviewsEnabled: true
     envVars:
       - key: VITE_API_URL
-        value: https://notes-mern-api.onrender.com/api
+        value: https://notes-mern-api-ioyr.onrender.com/api
